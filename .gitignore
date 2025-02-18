@@ -1,0 +1,30 @@
+# Environments
+.env
+.venv
+
+# Ignore build directories (common names)
+bin/
+lib/
+build/
+output/
+
+# Ignore platform-specific files
+.DS_Store  # macOS metadata files
+Thumbs.db  # Windows metadata files
+
+*.txt
+*.json
+
+# Ignore binary files and libraries
+*.o       # Object files
+*.a       # Static libraries
+*.so      # Shared libraries
+*.dll     # Windows DLLs
+*.exe     # Executable files
+*.bin     # Binary files
+*.lib     # Libraries
+*.dylib   # macOS dynamic librariess
+
+
+# Model for Language 
+checkpoints/
