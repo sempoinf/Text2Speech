@@ -14,6 +14,8 @@ Thumbs.db  # Windows metadata files
 
 *.txt
 *.json
+data/history
+data/cache
 
 # Ignore binary files and libraries
 *.o       # Object files
@@ -28,3 +30,6 @@ Thumbs.db  # Windows metadata files
 
 # Model for Language 
 checkpoints/
+
+
+

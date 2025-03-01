@@ -76,9 +76,9 @@ class TextChunker:
             with open(file_path, 'r', encoding='utf-8') as file:
                 text = file.read()
         elif file_extension == '.docx':
-            text = self.extract_text_from_docx(file_path)
+            text = self._extract_text_from_docx(file_path)
         elif file_extension == '.pdf':
-            text = self.extract_text_from_pdf(file_path)
+            text = self._extract_text_from_pdf(file_path)
         else:
             raise ValueError(f"Unsupported file type: {file_extension}")
 
@@ -87,7 +87,7 @@ class TextChunker:
         else:
             return text
     
-    def extract_text_from_docx(self, file_path):
+    def _extract_text_from_docx(self, file_path):
         if not file_path.lower().endswith('.docx'):
             raise ValueError("File is not a DOCX file.")
         
@@ -98,7 +98,7 @@ class TextChunker:
             print(f"Error processing DOCX file: {e}")
             return None
     
-    def extract_text_from_pdf(self, file_path):
+    def _extract_text_from_pdf(self, file_path):
         # Extract text from PDF file
         with open(file_path, 'rb') as file:
             reader = PdfReader(file)
@@ -139,6 +139,12 @@ class TextChunker:
             return self.split_text(text)
         else:
             return text
+        
+    def save_chunks_to_file(self, text, file_path, split=False):
+        chunks = self.split_text(text) if split else text
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.writelines(chunk + "\n" for chunk in chunks)
+        return file_path
 
 if __name__ == "__main__":
     chunker = TextChunker()
@@ -147,7 +153,7 @@ if __name__ == "__main__":
     # text = "Небо было пасмурным, а тёмные облака подавляли величественную атмосферу Дворца. Великолепный дворцовый зал был окутан тёмными облаками, как будто это была огромная клетка, крепко удерживающая людей."
     # print(len(text))
     # formated_txt = chunker.split_text(text)
-    # print(formated_txt)
+    # print(formated_txt[0])
     # print(len(formated_txt)) # out 2, cause 198 symbs
 
     # 198 in originaly, but after splitted -> 197, bacause space between takes deleted
@@ -158,9 +164,10 @@ if __name__ == "__main__":
     # print(leng)
 
 
-
     # Check text get from file
-    # test_txt = chunker.from_file(r'../Pets/test_text.txt', split=False)
+    # in_dir = r'data/input/test_text.txt'
+    # in_dir = r'tables.txt'
+    # test_txt = chunker.from_file(in_dir, split=False)
     # print(test_txt)
     # print(len(test_txt))
     # test_txt = chunker.from_file(r'../Pets/test_text.txt', split=True)
@@ -178,7 +185,7 @@ if __name__ == "__main__":
 
     # test_txt = chunker.from_url(url=site_url, split=True)
     # print(test_txt[:1000])
-    # # print(len(test_txt))
+    # print(len(test_txt))
     # counter = 0
     # for i, seg in enumerate(test_txt, start=1):
     #     print(f"Segment {i} - {len(seg)} length")
