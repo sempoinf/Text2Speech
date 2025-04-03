@@ -15,26 +15,30 @@ class AudioPostProcessor:
 
     def _get_audio_files(self):
         """ Get and Sort Files """
-        pattern = re.compile(rf"{re.escape(self.base_filename)}(?:_\d+)+\.(wav|mp3|ogg)")
+        pattern = re.compile(rf"{re.escape(self.base_filename)}_(\d+)\.(wav|mp3|ogg)$")
+        # print(pattern)
         files = [f for f in os.listdir(self.directory) if pattern.match(f)]
-
+        # print(files)
         # Sort files
-        files.sort(key=lambda x: int(re.findall(r"\d+", x)[-1]))
-        
+        files.sort(key=lambda x: int(re.search(r"_(\d+)\.", x).group(1)))
+        # print(files)
         return [os.path.join(self.directory, f) for f in files]
 
-    def normalize_audio(self, audio):
-        """ Normalization """
-        return audio.apply_gain(-audio.max_dBFS)
+    def normalize_audio(self, audio, target_dBFS=-15.0):
+        """ Normalize audio to a target dBFS level """
+        return audio.apply_gain(target_dBFS - audio.dBFS)
 
     def merge_audio(self):
         """ Merged in one file """
         files = self._get_audio_files()
+        # print(files)
         if not files:
             raise FileNotFoundError("No matching audio files found.")
 
-        combined = AudioSegment.empty()
+        # combined = AudioSegment.empty()
+        combined = AudioSegment.silent(duration=0)
         for file in files:
+            # input(file)
             audio = AudioSegment.from_file(file)
             audio = self.normalize_audio(audio)
             combined += audio

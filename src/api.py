@@ -36,10 +36,10 @@ class Application():
         """
         if source.startswith(("http://", "https://")):
             text_chunks = self.text_chunker.from_url(url=source, split=True)
-            print(f"Reading data from file finished!")
+            print(f"Reading data from url finished!")
         elif os.path.isfile(source):
             text_chunks = self.text_chunker.from_file(file_path=source, split=True)
-            print(f"Reading data from url finished!")
+            print(f"Reading data from file finished!")
         else:
             print("Invalid source provided. Must be a valid file path or URL.")
             return ""
@@ -132,11 +132,14 @@ if __name__ == "__main__":
     # tts_processor.process_texts(text_chunks)
 
 
-    in_dir = r'data/input/test_text.txt'
+    source = r'data/input/test_text.txt'
     out_dir = r'data/output/test'
+    mask = r'test'
     his_f = r'data/history/history.json'
-    api = Application(output_dir=out_dir, base_filename='test', history_file=his_f)
-    # api.tracker.reset_progress()
-    # chunks = api.fetch_text(in_dir)
-    # api.synthesize_text(chunks)
-    # api.audio_merger()
+    api = Application(output_dir=out_dir, base_filename=mask, history_file=his_f)
+    api.tracker.reset_progress()
+    chunks = api.fetch_text(source)
+    print(chunks)
+    api.synthesize_text(chunks)
+    api.audio_merger()
+    api.tracker.reset_progress()
