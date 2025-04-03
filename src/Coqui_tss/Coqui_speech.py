@@ -29,7 +29,7 @@ class CoquiTTS:
             speaker=speaker,
             language=language
         )
-        print(f"Аудиофайл сохранен: {output_path}")
+        print(f"Audio is saved: {output_path}")
     
     def available_speakers(self):
         """Возвращает список доступных дикторов."""

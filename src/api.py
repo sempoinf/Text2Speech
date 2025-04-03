@@ -10,7 +10,7 @@ from file_processors.audio_merger import AudioPostProcessor
 # at the end delete cache??
 
 class Application():
-    def __init__(self, output_dir: str, base_filename: str, history_file: str):
+    def __init__(self, output_dir: str, mask_name: str, history_file: str):
         """
         Main class that manages text processing, TTS synthesis, and progress tracking.
 
@@ -19,11 +19,11 @@ class Application():
         :param history_file: Path to the JSON file for tracking progress.
         """
         self.output_dir = output_dir
-        self.base_filename = base_filename
+        self.base_filename = mask_name
         self.text_chunker = TextChunker()
         self.tts = CoquiTTS(gpu=True)
         self.tracker = TTSProgressTracker(history_file)
-        self.merger = AudioPostProcessor(directory=output_dir, base_filename="test", output_format='mp3') # name want to get from parsing url or text
+        self.merger = AudioPostProcessor(directory=output_dir, base_filename=mask_name, output_format='mp3') # name want to get from parsing url or text
 
         os.makedirs(output_dir, exist_ok=True)
     
@@ -132,14 +132,24 @@ if __name__ == "__main__":
     # tts_processor.process_texts(text_chunks)
 
 
-    source = r'data/input/test_text.txt'
-    out_dir = r'data/output/test'
-    mask = r'test'
+    # source = r'data/input/test_text.txt'
+    # out_dir = r'data/output/test'
+    # mask = r'test'
+    # his_f = r'data/history/history.json'
+    # api = Application(output_dir=out_dir, base_filename=mask, history_file=his_f)
+    # api.tracker.reset_progress()
+    # chunks = api.fetch_text(source)
+    # print(chunks)
+    # api.synthesize_text(chunks)
+    # api.audio_merger()
+    # api.tracker.reset_progress()
+
+    source = r'https://ranobelib.me/ru/28369--the-rebirth-of-the-malicious-empress-of-military-lineage/read/v1/c1'
+    out_dir = r'/Users/yaao20u291/Pets/Text2Speech/data/output/coqui/Chong_Sheng_Zhi_Jiang_Men_Du_Hou/Chapter_1'
+    mask = r'Chapter_1'
     his_f = r'data/history/history.json'
-    api = Application(output_dir=out_dir, base_filename=mask, history_file=his_f)
-    api.tracker.reset_progress()
-    chunks = api.fetch_text(source)
-    print(chunks)
-    api.synthesize_text(chunks)
+    api = Application(output_dir=out_dir, mask_name=mask, history_file=his_f)
+    # api.tracker.reset_progress()
+    # chunks = api.fetch_text(source)
+    # api.synthesize_text(chunks)
     api.audio_merger()
-    api.tracker.reset_progress()
